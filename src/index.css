@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===============================================
+ * GLOBAL STYLES & CUSTOM UTILITIES
+ * =============================================== */
+
+:root {
+  --color-primary: #e09320;
+  --color-primary-glow: rgba(224, 147, 32, 0.4);
+  --color-accent: #dd515e;
+  --color-accent-glow: rgba(221, 81, 94, 0.4);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0a0a0d;
+  color: #e2e2e6;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #131318;
+}
+::-webkit-scrollbar-thumb {
+  background: #c2741a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e09320;
+}
+
+/* ===============================================
+ * REUSABLE COMPONENT CLASSES
+ * =============================================== */
+
+@layer components {
+  .heading-display {
+    @apply font-display tracking-tight;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full
+           bg-primary-500 px-8 py-4 text-sm font-semibold uppercase tracking-widest
+           text-secondary-950 transition-all duration-300
+           hover:bg-primary-400 hover:scale-105;
+  }
+
+  .btn-primary-glow {
+    @apply btn-primary;
+    box-shadow: 0 0 20px var(--color-primary-glow);
+  }
+  .btn-primary-glow:hover {
+    box-shadow: 0 0 35px var(--color-primary-glow), 0 0 70px var(--color-primary-glow);
+  }
+
+  .btn-outline {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full
+           border border-primary-500/60 px-8 py-4 text-sm font-semibold uppercase tracking-widest
+           text-primary-300 transition-all duration-300
+           hover:border-primary-400 hover:text-primary-200 hover:scale-105;
+  }
+
+  .btn-outline-glow {
+    @apply btn-outline;
+    box-shadow: 0 0 15px rgba(224, 147, 32, 0.15);
+  }
+  .btn-outline-glow:hover {
+    box-shadow: 0 0 25px rgba(224, 147, 32, 0.3), 0 0 50px rgba(224, 147, 32, 0.1);
+  }
+
+  .glow-card {
+    @apply relative overflow-hidden rounded-2xl border border-secondary-700/50
+           bg-secondary-900/80 backdrop-blur-sm
+           transition-all duration-500;
+  }
+  .glow-card:hover {
+    @apply border-primary-500/40;
+    box-shadow: 0 0 30px rgba(224, 147, 32, 0.15), 0 0 60px rgba(224, 147, 32, 0.05);
+    transform: translateY(-6px);
+  }
+
+  .glow-card-accent:hover {
+    @apply border-accent-500/40;
+    box-shadow: 0 0 30px rgba(221, 81, 94, 0.15), 0 0 60px rgba(221, 81, 94, 0.05);
+  }
+
+  .section-label {
+    @apply mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-primary-400;
+  }
+
+  .section-title {
+    @apply heading-display text-4xl font-bold text-secondary-50
+           sm:text-5xl lg:text-6xl;
+  }
+}
+
+/* ===============================================
+ * ANIMATION HELPERS
+ * =============================================== */
+
+/* Reveal on scroll — used with IntersectionObserver */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 {
+  transition-delay: 0.15s;
+}
+.reveal-delay-2 {
+  transition-delay: 0.3s;
+}
+.reveal-delay-3 {
+  transition-delay: 0.45s;
+}
+.reveal-delay-4 {
+  transition-delay: 0.6s;
+}
+
+/* Tilt reveal — cards start tilted and straighten on scroll into view.
+   Apply to a wrapper element around glow-card so the hover transform
+   on the card itself isn't overridden. */
+.reveal-tilt {
+  opacity: 0;
+  transform: perspective(1000px) rotateY(-8deg) rotateX(3deg) translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-tilt.is-visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0);
+}
+
+/* Shimmer text effect for headings */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #edbf6d 0%,
+    #e09320 25%,
+    #fdf8ef 50%,
+    #e09320 75%,
+    #edbf6d 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Parallax helper */
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 768px) {
+  .parallax-bg {
+    background-attachment: scroll;
+  }
+}
+
+/* Marquee banner gradient mask */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+/* Hero video overlay gradient */
+.hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 13, 0.5) 0%,
+    rgba(10, 10, 13, 0.6) 50%,
+    rgba(10, 10, 13, 0.9) 100%
+  );
+}
+
+/* ===============================================
+ * REDUCED MOTION — respect the visitor's OS setting
+ * =============================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .reveal-tilt {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-scroll-x {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
